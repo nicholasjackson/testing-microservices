@@ -3,3 +3,5 @@ run_db:
 
 stop_db:
 	docker rm -f db
+
+restart_db: stop_db run_db
