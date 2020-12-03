@@ -5,15 +5,15 @@ import (
 	"net/http"
 
 	"github.com/hashicorp/go-hclog"
-	"github.com/jmoiron/sqlx"
+	"github.com/nicholasjackson/testing-microservices/data"
 )
 
 type Branches struct {
 	log hclog.Logger
-	db  *sqlx.DB
+	db  data.DB
 }
 
-func NewBranches(l hclog.Logger, db *sqlx.DB) *Branches {
+func NewBranches(l hclog.Logger, db data.DB) *Branches {
 	return &Branches{l, db}
 }
 
@@ -43,6 +43,7 @@ func (b *Branches) Insert(rw http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&branch)
 	if err != nil {
+		b.log.Error("Unable to decode payload", "error", err)
 		http.Error(rw, err.Error(), http.StatusBadRequest)
 		return
 	}
