@@ -43,6 +43,7 @@ func (b *Branches) Insert(rw http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&branch)
 	if err != nil {
+		b.log.Error("Unable to decode payload", "error", err)
 		http.Error(rw, err.Error(), http.StatusBadRequest)
 		return
 	}
